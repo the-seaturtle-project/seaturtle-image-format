@@ -2,9 +2,22 @@
 #include <fstream>
 #include <string.h>
 #include <unistd.h>
+#include <vector>
+#include <iterator>
+#include <iomanip>
+#include <convertors/jpeg_to_stif.h>
 
 void help() {
     std::cout << "Help message" << std::endl;
+}
+
+std::string filetype(std::string filepath) {
+    size_t dot = filepath.find_last_of('.');
+    if (dot == std::string::npos) {
+        return "";
+    }
+
+    return filepath.substr(dot + 1);
 }
 
 int main(int argc, char* argv[]) {
@@ -65,6 +78,18 @@ int main(int argc, char* argv[]) {
         std::cerr << "ERROR: Did not specify an output path" << std::endl;
         return 1;
     }
+
+    // std::ifstream input_file(IN_PATH, std::ios::in | std::ios::binary);
+
+    // input_file.close();
+
+    if (CONVERT_TO_STIF == 1) {
+        std::string extension = filetype(IN_PATH);
+        if (extension == "jpeg") {
+            jpeg_to_stif(IN_PATH, OUT_PATH);
+        }
+    }
+
 
     return 0;
 }
